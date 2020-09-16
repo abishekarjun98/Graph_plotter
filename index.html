@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <style>
+     #everything
+     {
+      float: left;
+    }		
+  </style>
+</head>
+
+
+<div id="everything">
+	<input type="text" name="equation" id="equation"size="60" placeholder="Use the below to buttons to frame the equation">
+  <button onclick="calculate()" class="btn btn-success">draw</button>
+  <br><br>
+  <button onclick="add()" class="btn btn-info">Math.pow()</button>
+  <select id="trig" name="trig">
+    <option value='sin'>sin</option>
+    <option value="cos" >cos</option>
+    <option value="tan" >tan</option>
+  </select>
+  <button type="button" onclick="choosetrig()" id="btn_1" class="btn btn-info"><p class="f1">Choose Any Trignometric Function</p></button>
+
+</div>
+
+
+<canvas id="Canvas" width="600" height="600" style="border:1px solid #d3d3d3; margin-left: 100px; margin-top: 50px;">
+</canvas>
+
+
+<script>
+
+  var c = document.getElementById("Canvas");
+  var ctx = c.getContext("2d");
+  ctx.translate(300,300);
+
+
+  function graph()
+  {
+   ctx.clearRect(-300,-300,600,600);
+
+   ctx.moveTo(-300,0);
+   ctx.lineTo(300,0);
+
+   ctx.stroke();
+   ctx.moveTo(0,-300);
+   ctx.lineTo(0,300);
+
+   ctx.stroke();
+
+
+   for (var i = -300; i <= 300; i+=30) {
+
+     ctx.moveTo(-5,-i);
+     ctx.lineTo(5,-i);
+     ctx.stroke();
+     ctx.fillText(i,4,-i);
+   }
+   for (var i = -300; i <= 300; i+=30) {
+     ctx.moveTo(i,-5);
+     ctx.lineTo(i,5);
+     ctx.stroke();
+     ctx.fillText(i,i,11);
+   }
+}
+
+
+graph();
+
+
+let eq;
+let points=[];
+let  arr=["blue","red","yellow","green","brown","orange"];
+
+let enteredeq = document.getElementById("equation");
+
+function add()
+
+{ 
+  enteredeq.value+="Math.pow(x,)";
+}
+
+
+function choosetrig()
+{
+  var trig_eq=document.getElementById("trig").value;
+  setfunction(trig_eq);
+}
+
+function setfunction(trig)
+{
+enteredeq.value+="Math."+trig+"(x)";;
+}
+
+
+function calculate()
+{
+  equation=document.getElementById("equation").value;
+  points=[];
+
+  for (var i = -300; i<=300; i+=1) {
+
+   var neweq = equation.replace(/x/g,i);
+   y_corr=eval(neweq);
+
+   points.push({x:i,y:-y_corr});
+
+ }
+ draw(points);
+
+}
+
+
+function draw(points)
+{
+
+
+	ctx.strokeStyle=arr[Math.floor(Math.random() * 7)];
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+
+
+  for (i = 1; i < points.length - 2; i ++)
+  {
+    var xcontrol = (points[i].x + points[i + 1].x) / 2;
+    var ycontrol = (points[i].y + points[i + 1].y) / 2;
+    ctx.quadraticCurveTo(points[i].x, points[i].y, xcontrol, ycontrol);
+  }
+
+  ctx.quadraticCurveTo(points[i].x, points[i].y, points[i+1].x,points[i+1].y);
+
+  ctx.stroke();
+  ctx.closePath();
+
+}
+
+
+
+
+</script>
+
+</body>
+</html>
